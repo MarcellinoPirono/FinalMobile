@@ -30,15 +30,25 @@ class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Obse
     }
 
     fun saveOrUpdate() {
-        val name = inputName.value!!
-        val email = inputEmail.value!!
-        insert(Teman(0, name, email))
-        inputName.value = ""
-        inputEmail.value = ""
+        if(isUpdateOrDelete){
+            temanToUpdateOrDelete.name = inputName.value!!
+            temanToUpdateOrDelete.email = inputEmail.value!!
+            update(temanToUpdateOrDelete)
+        }else {
+            val name = inputName.value!!
+            val email = inputEmail.value!!
+            insert(Teman(0, name, email))
+            inputName.value = ""
+            inputEmail.value = ""
+        }
     }
 
     fun clearAllOrDelete(){
-        clearAll()
+        if(isUpdateOrDelete){
+            delete(temanToUpdateOrDelete)
+        }else{
+            clearAll()
+        }
     }
 
     fun  insert(teman: Teman) = viewModelScope.launch {
@@ -47,10 +57,21 @@ class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Obse
 
     fun update(teman: Teman) = viewModelScope.launch {
         repository.update(teman)
+        inputName.value = null
+        inputName.value = null
+        isUpdateOrDelete = false
+        saveOrUpdateButtonText.value = "Save"
+        clearAllOrDeleteButtonText.value = "Clear All"
+
     }
 
     fun delete(teman: Teman) = viewModelScope.launch {
         repository.delete(teman)
+        inputName.value = null
+        inputName.value = null
+        isUpdateOrDelete = false
+        saveOrUpdateButtonText.value = "Save"
+        clearAllOrDeleteButtonText.value = "Clear All"
     }
 
     fun clearAll() = viewModelScope.launch {
