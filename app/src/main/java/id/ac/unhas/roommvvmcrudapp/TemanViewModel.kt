@@ -1,6 +1,7 @@
 package id.ac.unhas.roommvvmcrudapp
 
 import androidx.databinding.Bindable
+import androidx.databinding.Observable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,9 +9,9 @@ import id.ac.unhas.roommvvmcrudapp.db.Teman
 import id.ac.unhas.roommvvmcrudapp.db.TemanRepository
 import kotlinx.coroutines.launch
 
-class TemanViewModel(private val repository: TemanRepository) : ViewModel() {
+class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Observable {
 
-    val teman = repository.teman
+    val temans = repository.teman
 
     @Bindable
     val inputName = MutableLiveData<String>()
@@ -52,5 +53,13 @@ class TemanViewModel(private val repository: TemanRepository) : ViewModel() {
 
     fun clearAll() = viewModelScope.launch {
         repository.deleteAll()
+    }
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+
+    }
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+
     }
 }
