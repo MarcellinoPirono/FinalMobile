@@ -58,34 +58,51 @@ class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Obse
     }
 
     fun  insert(teman: Teman) = viewModelScope.launch {
-        repository.insert(teman)
-        statusMessage.value = Event("Teman Berhasil Ditambahkan")
+        val newRowId:Long = repository.insert(teman)
+        if(newRowId>-1){
+            statusMessage.value = Event("Teman Berhasil Ditambahkan $newRowId")
+        }else {
+            statusMessage.value = Event("Error")
+        }
     }
 
     fun update(teman: Teman) = viewModelScope.launch {
-        repository.update(teman)
+        val noOfRows = repository.update(teman)
+        if(noOfRows>0){
         inputName.value = null
         inputEmail.value = null
         isUpdateOrDelete = false
         saveOrUpdateButtonText.value = "Save"
         clearAllOrDeleteButtonText.value = "Clear All"
-        statusMessage.value = Event("Teman Berhasil Diubah")
-
+        statusMessage.value = Event("$noOfRows Teman Berhasil Diubah")
+        }else{
+            statusMessage.value = Event("Error")
+        }
     }
 
     fun delete(teman: Teman) = viewModelScope.launch {
-        repository.delete(teman)
-        inputName.value = null
-        inputEmail.value = null
-        isUpdateOrDelete = false
-        saveOrUpdateButtonText.value = "Save"
-        clearAllOrDeleteButtonText.value = "Clear All"
-        statusMessage.value = Event("Teman Berhasil Dihapus")
+        val noOfRowsDeleted = repository.delete(teman)
+
+        if(noOfRowsDeleted>0) {
+            inputName.value = null
+            inputEmail.value = null
+            isUpdateOrDelete = false
+            saveOrUpdateButtonText.value = "Save"
+            clearAllOrDeleteButtonText.value = "Clear All"
+            statusMessage.value = Event("$noOfRowsDeleted Teman Berhasil Dihapus")
+        }else{
+            statusMessage.value = Event("Error")
+        }
     }
 
     fun clearAll() = viewModelScope.launch {
-        repository.deleteAll()
-        statusMessage.value = Event("Semua Teman Berhasil Dihapus")
+        val noOfRowsDeleted = repository.deleteAll()
+        if(noOfRowsDeleted>0) {
+            statusMessage.value = Event("$noOfRowsDeleted Teman Berhasil Dihapus")
+        }else{
+            statusMessage.value = Event("Error")
+
+        }
     }
 
     fun initUpdateAndDelete(teman: Teman){
