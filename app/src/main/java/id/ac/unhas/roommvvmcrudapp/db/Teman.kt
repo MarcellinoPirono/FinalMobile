@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "teman_data_table")
-data class teman(
+data class Teman(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "teman_name")
