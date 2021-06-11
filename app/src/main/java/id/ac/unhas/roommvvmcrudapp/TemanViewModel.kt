@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Observable {
 
-    val temans = repository.teman
+    val teman = repository.teman
 
     @Bindable
     val inputName = MutableLiveData<String>()

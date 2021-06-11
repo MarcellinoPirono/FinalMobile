@@ -19,5 +19,5 @@ interface TemanDAO {
     suspend fun deleteAll() : Int
 
     @Query("SELECT * FROM teman_data_table")
-    fun getAllTeman():Flow<List<Teman>>
+    fun getAllTeman():LiveData<List<Teman>>
 }

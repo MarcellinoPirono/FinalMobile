@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import id.ac.unhas.roommvvmcrudapp.databinding.ActivityMainBinding
 import id.ac.unhas.roommvvmcrudapp.db.TemanDatabase
 import id.ac.unhas.roommvvmcrudapp.db.TemanRepository
@@ -22,5 +23,18 @@ class MainActivity : AppCompatActivity() {
         temanViewModel = ViewModelProvider(this,factory).get(TemanViewModel::class.java)
         binding.myViewModel = temanViewModel
         binding.lifecycleOwner = this
+        initRecyclerView()
+
+    }
+    private fun initRecyclerView(){
+    binding.temanRecyclerView.layoutManager = LinearLayoutManager(this)
+        displayTemanList()
+    }
+
+    private fun displayTemanList(){
+        temanViewModel.teman.observe(this, Observer {
+            Log.i("MYTAG",it.toString())
+            binding.temanRecyclerView.adapter = MyRecyclerViewAdapter(it)
+        })
     }
 }
