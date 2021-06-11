@@ -8,7 +8,9 @@ import id.ac.unhas.roommvvmcrudapp.databinding.ListItemBinding
 import id.ac.unhas.roommvvmcrudapp.db.Teman
 import id.ac.unhas.roommvvmcrudapp.generated.callback.OnClickListener
 
-class MyRecyclerViewAdapter(private val temanList: List<Teman>) : RecyclerView.Adapter<MyViewHolder>()
+class MyRecyclerViewAdapter(private val temanList: List<Teman>
+                            , private val clickListener: (Teman)->Unit)
+    : RecyclerView.Adapter<MyViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -18,7 +20,7 @@ class MyRecyclerViewAdapter(private val temanList: List<Teman>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bind(temanList[position])
+        holder.bind(temanList[position],clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -29,8 +31,11 @@ class MyRecyclerViewAdapter(private val temanList: List<Teman>) : RecyclerView.A
 
 class MyViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(teman: Teman) {
+    fun bind(teman: Teman,clickListener: (Teman)->Unit) {
         binding.nameTextView.text = teman.name
         binding.emailTextView.text = teman.email
+        binding.listItemLayout.setOnClickListener{
+            clickListener(teman)
+        }
     }
 }

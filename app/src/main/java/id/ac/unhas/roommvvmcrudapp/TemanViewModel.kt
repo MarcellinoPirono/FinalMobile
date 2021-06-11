@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Observable {
 
     val teman = repository.teman
+    private var isUpdateOrDelete = false
+    private lateinit var temanToUpdateOrDelete : Teman
 
     @Bindable
     val inputName = MutableLiveData<String>()
@@ -54,6 +56,16 @@ class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Obse
     fun clearAll() = viewModelScope.launch {
         repository.deleteAll()
     }
+
+    fun initUpdateAndDelete(teman: Teman){
+        inputName.value = teman.name
+        inputName.value = teman.email
+        isUpdateOrDelete = true
+        temanToUpdateOrDelete = teman
+        saveOrUpdateButtonText.value = "Update"
+        clearAllOrDeleteButtonText.value = "Delete"
+    }
+
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
 
