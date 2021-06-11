@@ -1,5 +1,6 @@
 package id.ac.unhas.roommvvmcrudapp
 
+import android.util.Patterns
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.lifecycle.LiveData
@@ -36,16 +37,25 @@ class TemanViewModel(private val repository: TemanRepository) : ViewModel(),Obse
     }
 
     fun saveOrUpdate() {
-        if(isUpdateOrDelete){
-            temanToUpdateOrDelete.name = inputName.value!!
-            temanToUpdateOrDelete.email = inputEmail.value!!
-            update(temanToUpdateOrDelete)
-        }else {
-            val name = inputName.value!!
-            val email = inputEmail.value!!
-            insert(Teman(0, name, email))
-            inputName.value = ""
-            inputEmail.value = ""
+
+        if(inputName.value==null){
+            statusMessage.value = Event("Silahkan Masukkan Nama Teman")
+        }else if(inputEmail.value==null){
+            statusMessage.value = Event("Silahkan Masukkan Email Teman")
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(inputEmail.value!!).matches()){
+            statusMessage.value = Event("Silahkan Masukkan Email dengan Benar")
+        }else{
+            if(isUpdateOrDelete){
+                temanToUpdateOrDelete.name = inputName.value!!
+                temanToUpdateOrDelete.email = inputEmail.value!!
+                update(temanToUpdateOrDelete)
+            }else {
+                val name = inputName.value!!
+                val email = inputEmail.value!!
+                insert(Teman(0, name, email))
+                inputName.value = ""
+                inputEmail.value = ""
+            }
         }
     }
 

@@ -16,6 +16,7 @@ import id.ac.unhas.roommvvmcrudapp.db.TemanRepository
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var temanViewModel: TemanViewModel
+    private lateinit var adapter: MyRecyclerViewAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main)
@@ -36,13 +37,17 @@ class MainActivity : AppCompatActivity() {
     }
     private fun initRecyclerView(){
     binding.temanRecyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = MyRecyclerViewAdapter({selectedItem:Teman->listItemClicked(selectedItem)})
+        binding.temanRecyclerView.adapter = adapter
         displayTemanList()
     }
 
     private fun displayTemanList(){
         temanViewModel.teman.observe(this, Observer {
             Log.i("MYTAG",it.toString())
-            binding.temanRecyclerView.adapter = MyRecyclerViewAdapter(it,{selectedItem:Teman->listItemClicked(selectedItem)})
+            adapter.setList(it)
+            adapter.notifyDataSetChanged()
+
         })
     }
 
