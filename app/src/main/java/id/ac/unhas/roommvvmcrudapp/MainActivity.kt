@@ -27,6 +27,12 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initRecyclerView()
 
+        temanViewModel.messagge.observe(this, Observer {
+            it.getContentIfNotHandled()?.let{
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        })
+
     }
     private fun initRecyclerView(){
     binding.temanRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -41,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listItemClicked(teman: Teman){
-        Toast.makeText(this,"selected name is ${teman.name}",Toast.LENGTH_LONG).show()
+        //Toast.makeText(this,"selected name is ${teman.name}",Toast.LENGTH_LONG).show()
         temanViewModel.initUpdateAndDelete(teman)
     }
 }
